@@ -5,7 +5,15 @@
         <p
             class="rounded-xl bg-indigo-600 px-4 py-2 font-medium text-indigo-50"
         >
-            Hey John!
+            {{ item.content }}
         </p>
     </div>
 </template>
+<script setup>
+defineProps({
+    item: {
+        type: Object,
+        required: true,
+    },
+});
+</script>

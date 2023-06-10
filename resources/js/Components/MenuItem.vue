@@ -1,7 +1,7 @@
 <template>
-    <a
-        href="javascript:void(0)"
-        class="flex items-center space-x-3 rounded-l border-l-4 border-indigo-500 bg-white px-3 py-4 shadow-sm"
+    <Link
+        :href="route('user.messages.show', item.id)"
+        :class="itemClass"
     >
         <div class="relative flex-none">
             <img
@@ -14,13 +14,41 @@
             ></span>
         </div>
         <div class="grow">
-            <p class="mb-0.5 line-clamp-1 text-sm font-bold">John Smith</p>
+            <p class="mb-0.5 line-clamp-1 text-sm font-bold">{{ item.name }}</p>
             <p class="line-clamp-1 text-xs font-medium text-slate-500">
-                j.smith@example.com
+                {{ item.email }}
             </p>
         </div>
         <div class="flex-none self-start">
             <p class="text-xs font-medium text-slate-400">Now</p>
         </div>
-    </a>
+    </Link>
 </template>
+<script setup>
+import { Link } from '@inertiajs/vue3';
+import { storeToRefs } from "pinia";
+import { computed } from 'vue';
+import { isNil } from "lodash"
+
+// Import Store
+import { useRecipientStore } from "@/store/useRecipientStore";
+
+const props = defineProps({
+    item: {
+        type: Object,
+        required: true,
+    },
+});
+
+/**--------------Recipients-----------------*/
+const recipientStore = useRecipientStore();
+const { activeRecipient } = storeToRefs(recipientStore);
+
+const itemClass = computed(() => {
+  if (!isNil(activeRecipient.value) && props.item.id === activeRecipient.value.id) {
+    return 'flex items-center space-x-3 rounded-l border-l-4 border-indigo-500 bg-white px-3 py-4 shadow-sm'
+  }
+
+  return 'flex items-center space-x-3 rounded-l border-l-4 border-transparent px-3 py-4 hover:border-indigo-300 hover:bg-white/50 active:border-indigo-500 active:bg-white active:shadow-sm'
+})
+</script>

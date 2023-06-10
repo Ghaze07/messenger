@@ -9,8 +9,8 @@
             class="flex h-20 w-full flex-none items-center justify-between pl-8 pr-2"
         >
             <!-- Brand -->
-            <a
-                href="javascript:void(0)"
+            <Link
+                :href="route('dashboard')"
                 class="group inline-flex items-center space-x-2 text-lg font-bold tracking-wide text-slate-800 transition hover:opacity-75 active:opacity-100 lg:justify-center"
             >
                 <svg
@@ -32,12 +32,17 @@
                         >Chat</span
                     ></span
                 >
-            </a>
+            </Link>
             <!-- END Brand -->
         </div>
         <!-- Main Navigation -->
         <div class="grow space-y-2 pl-4 pt-2">
-            <menu-item />
+            <template
+                v-for="recipient in currentRecipients"
+                :key="recipient.id"
+            >
+                <menu-item :item="recipient"/>
+            </template>
         </div>
         <!-- End Main Navigation -->
 
@@ -69,6 +74,17 @@
     <!-- End Page Sidebar -->
 </template>
 <script setup>
+// Import utils
+import { storeToRefs } from "pinia";
+import { Link } from '@inertiajs/vue3';
+
+// Import Store
+import { useRecipientStore } from "@/store/useRecipientStore";
+
 // Import Components
 import MenuItem from "@/Components/MenuItem.vue";
+
+/**--------------Recipients-----------------*/
+const recipientStore = useRecipientStore();
+const { currentRecipients } = storeToRefs(recipientStore);
 </script>
