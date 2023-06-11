@@ -12,7 +12,7 @@
 // Import utils
 import { Head } from "@inertiajs/vue3";
 import { onMounted } from "vue";
-import { isNil } from "lodash"
+import { isNil } from "lodash";
 
 // Import Store
 import { useRecipientStore } from "@/store/useRecipientStore";
@@ -23,12 +23,18 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 /**--------------Recipients-----------------*/
 onMounted(async () => {
     await getRecipients();
+    console.log("Component mounted.");
+    console.log("echo...", window.Echo);
+    window.Echo.channel("channel-ghaze").listen(".socketStatus", (e) => {
+        console.log("Hello");
+        console.log(e);
+    });
 });
 
 const recipientStore = useRecipientStore();
 
 async function getRecipients() {
-    recipientStore.updateLoadingStatus(true)
+    recipientStore.updateLoadingStatus(true);
     try {
         const { data } = await axios.get("recipients");
         if (!isNil(data?.recipients)) {
@@ -37,6 +43,6 @@ async function getRecipients() {
     } catch (error) {
         alert("there is some error");
     }
-    recipientStore.updateLoadingStatus(false)
+    recipientStore.updateLoadingStatus(false);
 }
 </script>
